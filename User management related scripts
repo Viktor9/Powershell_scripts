@@ -1,1 +1,22 @@
+#Lisitng the user's groups
+
 (get-aduser logonname -Properties Memberof).memberof
+
+#####
+# search for users where the managers name something like...
+get-ADUser -filter * -Properties Manager | Where-Object {$_.Manager -like "*Anything_in_the_name*"}
+
+####
+#searching for users who are disabled and hava employeeid as well in a specified foleder or object unit:
+
+$result = @() 
+$examined_users = Get-ADUser -Filter * -SearchBase 'OU_name' | get-aduser -Properties employeeid | Where-Object {($_.Enabled -like "False")} | sort SamaccountName | select SamaccountName, employeeid 
+
+foreach($object in $examined_users){ 
+	if($object.employeeid -ne $null){ 
+		$result += $object | select samaccountname,employeeid 
+	} 
+} 
+$result | Export-Csv -NoTypeInformation -Path C:\temp\users_w_id.csv
+
+

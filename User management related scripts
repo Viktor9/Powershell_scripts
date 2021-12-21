@@ -19,4 +19,6 @@ foreach($object in $examined_users){
 } 
 $result | Export-Csv -NoTypeInformation -Path C:\temp\users_w_id.csv
 
+#Search users by employee id:
+Get-ADUser -Filter { (EmployeeID -like "1234") } | select name,SamaccountName
 

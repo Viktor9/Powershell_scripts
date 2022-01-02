@@ -22,3 +22,13 @@ $result | Export-Csv -NoTypeInformation -Path C:\temp\users_w_id.csv
 #Search users by employee id:
 Get-ADUser -Filter { (EmployeeID -like "1234") } | select name,SamaccountName
 
+#Search for users who are members of an AD security group and they are disabled in the system
+Get-ADGroupMember -identity "Security_group_comes_here" -Recursive | Get-ADUser -Property Enabled | Where-Object {$_.Enabled -like "False"} | FT Name, Enabled
+
+#User finder with an exact manager
+$manager="managers_Distinguished_name_from_AD_comes_here"
+#With manager, name starts with a something leki here wiht "a", and user is enabled in the AD and export list in csv
+Get-Aduser -Filter {(Manager -eq $manager) -and (name -like "a*") -and (enabled -eq $true)} -Properties Manager | sort | select name, SamaccountName, Manager | Export-Csv -NoType C:\folder\filename.csv
+
+#lists AD user with a specific manager, user's name starts with "a" and title starts with "Support"
+Get-Aduser -Filter {(Manager -eq $manager) -and (name -like "a*") -and (title -like "Support*")} -Properties * | sort | select name, SamaccountName

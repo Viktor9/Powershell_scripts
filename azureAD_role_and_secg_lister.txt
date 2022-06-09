@@ -1,0 +1,47 @@
+
+
+Connect-AzureAD -Confirm
+Listing Azure Ad roles
+
+Connect-MsolService
+
+$RolesCollection = @()
+$Roles = Get-MsolRole
+ForEach ($Role In $Roles){
+$Members = Get-MsolRoleMember -RoleObjectId $Role.ObjectId
+ForEach ($Member In $Members) {
+$obj = New-Object PSObject -Property @{
+RoleName = $Role.Name
+MemberName = $Member.DisplayName
+MemberType = $Member.RoleMemberType
+}
+$RolesCollection += $obj
+}
+}
+#Writne on screen
+#Write-Output $RolesCollection | Sort-Object RoleName,MemberName | ft RoleName,MemberName,MemberType
+$RolesCollection | Sort-Object RoleName,MemberName | select RoleName,MemberName,MemberType | Export-Csv -NoType "C:\temp\AzureRoles.csv" -Append
+
+#Listing Azure secgroup
+
+$SecGroupCollection = @()
+$secgroups = @(
+[pscustomobject]@{ObjectId='objectId'; DisplayN="displayname"}
+)
+foreach ($SecGoId in $secgroups){
+$users = Get-AzureADGroupMember -ObjectId $SecGoId.ObjectId -All $true
+foreach($usr in $users){
+
+$obj2 = New-Object PSObject -Property @{
+GroupName = $SecGoId.DisplayN
+MemberName = $usr.DisplayName
+UPN = $usr.UserPrincipalName
+}
+$SecGroupCollection += $obj2
+#Write-Output $obj2
+}
+}
+#Writne on screen
+#Write-Output $SecGroupCollection | Sort-Object Groupname,MemberName | ft Groupname,MemberName,UPN
+$SecGroupCollection | Sort-Object Groupname,MemberName | select Groupname,MemberName,UPN | Export-Csv -NoType "C:\temp\AzureRoles_secGroups.csv" -Append
+

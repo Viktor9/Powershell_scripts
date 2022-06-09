@@ -1,0 +1,4 @@
+#New user with mailbox lister PS script
+
+$mh = (get-date).AddHours(-12)
+Get-Aduser -Filter * -Property employeeid, mail, whenCreated | Where-Object {($.EmployeeID -ne $null) -and ($.mail -ne $null) -and ($_.whenCreated -ge $mh) } | select name, employeeid, mail, whenCreated

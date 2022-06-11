@@ -32,3 +32,16 @@ Get-Aduser -Filter {(Manager -eq $manager) -and (name -like "a*") -and (enabled 
 
 #lists AD user with a specific manager, user's name starts with "a" and title starts with "Support"
 Get-Aduser -Filter {(Manager -eq $manager) -and (name -like "a*") -and (title -like "Support*")} -Properties * | sort | select name, SamaccountName
+
+#Ps custom objectsi in an array
+$data = @(
+    [pscustomobject]@{FirstName='Kevin';LastName='Marquette'}
+    [pscustomobject]@{FirstName='John'; LastName='Doe'}
+)
+#adding new row
+$date += [pscustomobject]@{Firstname='Paul';LastName='Joe'}
+
+
+
+
+

@@ -39,7 +39,7 @@ $data = @(
     [pscustomobject]@{FirstName='John'; LastName='Doe'}
 )
 #adding new row
-$date += [pscustomobject]@{Firstname='Paul';LastName='Joe'}
+$data += [pscustomobject]@{Firstname='Paul';LastName='Joe'}
 
 
 
